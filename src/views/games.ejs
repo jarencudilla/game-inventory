@@ -10,9 +10,72 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <body>
+    <%- include('partials/nav.ejs') %>
     <div class="container">
-      <h1 class="header">Game Inventory</h1>
-      <p>Games Library is currently empty.</p>
+      <div id="app">
+        <div class="row" id="gameList">
+            <h3>Game list</h3>
+            <table v-if="hasGames">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Game Name</th>
+                        <th>Developer</th>
+                        <th>Game Type</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="game in games">
+                    <td>{{ game.year }}</td>
+                    <td>{{ game.game_name }}</td>
+                    <td>{{ game.developer }}</td>
+                    <td>{{ game.game_type }}</td>
+                    <td>
+                      <button id="gameDelete" @click="confirmDeleteGame(game.id)" class="btn-small"><i class="material-icons right">delete</i>Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+            <p v-if="noGames">No games added yet!</p>
+        </div>
+        <div class="row" id="gameEdit">
+          <h3>Add a game</h3>
+          <form class="col s12" @submit.prevent="addGame">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input v-model="year" ref="year" placeholder="2017" id="year" type="text" class="validate">
+                    <label for="year">Year</label>
+                </div>
+                <div class="input-field col s6">
+                  <input v-model="game_name" ref="game_name" placeholder="Ghost Recon : Wildlands" id="game_name" type="text" class="validate">
+                  <label for="game_name">Game Name</label>
+                </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+                <input v-model="developer" ref="developer" placeholder="Ubisoft" id="developer" type="text" class="validate">
+                <label for="developer">Developer</label>
+            </div>
+            <div class="input-field col s6">
+                <input v-model="game_type" ref="game_type" placeholder="Open World" id="game_type" type="text" class="validate">
+                <label for="game_type">Game Type</label>
+            </div>
+        </div>
+        <button id="gameEditSubmit" class="btn" type="submit"><i class="material-icons right">send</i>Submit</button>
+        </form>
+      </div>
+      <div id="deleteConfirm" ref="deleteConfirm" class="modal">
+        <div class="modal-content">
+            <h4>Confirm delete</h4>
+            <p>Delete {{ selectedGame }}?</p>
+        </div>
+        <div class="modal-footer">
+            <button @click="deleteGame(selectedGameId)" class="modal-close btn-flat">Ok</button>
+            <button class="modal-close btn-flat">Cancel</button>
+        </div>
+      </div>
     </div>
-  </body>
+  </div>
+  <script src="js/main.js"></script></body>
 </html>
